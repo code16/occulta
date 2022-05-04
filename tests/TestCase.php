@@ -2,9 +2,9 @@
 
 namespace Code16\Occulta\Tests;
 
+use Code16\Occulta\OccultaServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Code16\Occulta\OccultaServiceProvider;
 
 class TestCase extends Orchestra
 {
