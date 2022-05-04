@@ -18,7 +18,7 @@ class EncryptDotenvWithKmsCommand extends Command
         $service = new Occulta();
 
         Storage::disk(
-            config('encrypt-env-kms.destination_disk')
+            config('occulta.destination_disk')
         )->put(
             'dotenv/' . Carbon::now()->format('YmdHis') . '.env.kms',
             $service->encrypt(

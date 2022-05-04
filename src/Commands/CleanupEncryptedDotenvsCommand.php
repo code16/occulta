@@ -15,14 +15,14 @@ class CleanupEncryptedDotenvsCommand extends Command
     {
         collect(
             Storage::disk(
-                config('encrypt-env-kms.destination_disk')
+                config('occulta.destination_disk')
             )->files('dotenv/')
         )
             ->sort()
-            ->slice(config('encrypt-env-kms.number_of_encrypted_dotenv_to_keep_when_cleaning_up'))
+            ->slice(config('occulta.number_of_encrypted_dotenv_to_keep_when_cleaning_up'))
             ->each(function ($filename) {
                 Storage::disk(
-                    config('encrypt-env-kms.destination_disk')
+                    config('occulta.destination_disk')
                 )->delete($filename);
             });
 

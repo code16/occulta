@@ -30,8 +30,8 @@ class Occulta
         }
 
         $this->client = new KmsClient($clientParams);
-        $this->keyId = config('encrypt-env-kms.key_id');
-        $this->encryptionContext = config('encrypt-env-kms.context', []);
+        $this->keyId = config('occulta.key_id');
+        $this->encryptionContext = config('occulta.context', []);
     }
 
     public function encrypt($value, $serialize = true)
