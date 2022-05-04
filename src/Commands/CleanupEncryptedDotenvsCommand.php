@@ -19,7 +19,7 @@ class CleanupEncryptedDotenvsCommand extends Command
             )->files('dotenv/')
         )
             ->sort()
-            ->slice(config('occulta.number_of_encrypted_dotenv_to_keep_when_cleaning_up'))
+            ->slice(0, -1 * config('occulta.number_of_encrypted_dotenv_to_keep_when_cleaning_up'))
             ->each(function ($filename) {
                 Storage::disk(
                     config('occulta.destination_disk')
