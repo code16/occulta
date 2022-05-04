@@ -3,6 +3,7 @@
 namespace Code16\Occulta\Commands;
 
 use Carbon\Carbon;
+use Code16\Occulta\Occulta;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +15,7 @@ class EncryptDotenvWithKmsCommand extends Command
 
     public function handle(): int
     {
-        $service = new LaravelEncryptEnvKms();
+        $service = new Occulta();
 
         Storage::disk(
             config('encrypt-env-kms.destination_disk')
