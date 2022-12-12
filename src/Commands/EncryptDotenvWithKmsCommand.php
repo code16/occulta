@@ -11,7 +11,7 @@ class EncryptDotenvWithKmsCommand extends Command
 {
     public $signature = 'occulta:encrypt';
 
-    public $description = 'Store an encrypted with kms and versioned copy of .env';
+    public $description = 'Store in s3 an encrypted version of current .env';
 
     public function handle(): int
     {
@@ -22,7 +22,9 @@ class EncryptDotenvWithKmsCommand extends Command
         )->put(
             'dotenv/' . Carbon::now()->format('YmdHis') . '.env.kms',
             $service->encrypt(
-                file_get_contents(base_path('.env'))
+                config('occulta.should_compress')
+                    ? gzencode(file_get_contents(base_path('.env')))
+                    : file_get_contents(base_path('.env'))
             )
         );
 

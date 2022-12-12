@@ -10,6 +10,8 @@ return [
         // 'my_secret_key' => 'my_secret_value'
     ],
 
+    'should_compress' => env('OCCULTA_SHOULD_COMPRESS', false),
+
     'destination_disk' => '',
 
     'number_of_encrypted_dotenv_to_keep_when_cleaning_up' => env('NUMBER_OF_ENCRYPTED_DOTENV_TO_KEEP_WHEN_CLEANING_UP', 7),
