@@ -21,8 +21,9 @@ class EncryptFileWithKmsCommand extends Command
         $envFilePath = base_path('.env');
 
         if ($envFileSuffix) {
-            if(preg_match('/([\s ])/m', $envFileSuffix)) {
+            if (preg_match('/([\s ])/m', $envFileSuffix)) {
                 $this->error('Environment suffix contains whitespaces.');
+
                 return self::FAILURE;
             }
 
@@ -32,14 +33,16 @@ class EncryptFileWithKmsCommand extends Command
 
         $files = $service->encryptFile($envFilePath);
 
-        if(is_array($files) && isset($files['file']) && isset($files['key'])) {
+        if (is_array($files) && isset($files['file']) && isset($files['key'])) {
             $file = $files['file'];
             $key = $files['key'];
 
             $zip = new ZipArchive();
             $zipPath = base_path($envFileSuffix ? '.env.'.$envFileSuffix.'.encrypted.zip' : '.env.encrypted.zip');
-            if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {;
+            if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {
+                ;
                 $this->error('Failed to create zip file.');
+
                 return self::FAILURE;
             }
 
@@ -70,6 +73,7 @@ class EncryptFileWithKmsCommand extends Command
             );
         } else {
             $this->error('Encryption failed or returned unexpected format.');
+
             return self::FAILURE;
         }
 

@@ -46,7 +46,7 @@ class Occulta
 
     public function encryptFile($filePath)
     {
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             throw new \InvalidArgumentException("File does not exist: {$filePath}");
         }
 
