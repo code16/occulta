@@ -40,6 +40,7 @@ class EncryptFileWithKmsCommand extends Command
             $zip = new ZipArchive();
             $zipPath = base_path($envFileSuffix ? '.env.'.$envFileSuffix.'.encrypted.zip' : '.env.encrypted.zip');
             if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {
+
                 $this->error('Failed to create zip file.');
 
                 return self::FAILURE;
