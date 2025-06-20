@@ -10,9 +10,9 @@ use ZipArchive;
 
 class EncryptFileWithKmsCommand extends Command
 {
-    public $signature = 'occulta:encrypt-file';
+    public $signature = 'occulta:encrypt';
 
-    public $description = 'Store in s3 an encrypted version of current .env';
+    public $description = 'Store in configured disk an encrypted version of current .env';
 
     public function handle(): int
     {
@@ -21,8 +21,9 @@ class EncryptFileWithKmsCommand extends Command
         $envFilePath = base_path('.env');
 
         if ($envFileSuffix) {
-            if(preg_match('/([\s ])/m', $envFileSuffix)) {
+            if (preg_match('/([\s ])/m', $envFileSuffix)) {
                 $this->error('Environment suffix contains whitespaces.');
+
                 return self::FAILURE;
             }
 
@@ -32,18 +33,19 @@ class EncryptFileWithKmsCommand extends Command
 
         $files = $service->encryptFile($envFilePath);
 
-        if(is_array($files) && isset($files['file']) && isset($files['key'])) {
+        if (is_array($files) && isset($files['file']) && isset($files['key'])) {
             $file = $files['file'];
             $key = $files['key'];
 
             $zip = new ZipArchive();
             $zipPath = base_path($envFileSuffix ? '.env.'.$envFileSuffix.'.encrypted.zip' : '.env.encrypted.zip');
-            if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {;
+            if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {
                 $this->error('Failed to create zip file.');
+
                 return self::FAILURE;
             }
 
-            $zip->addFile($file, 'file.encrypted');
+            $zip->addFile($file, ($envFileSuffix ? '.env.'.$envFileSuffix.'.encrypted' : '.env.encrypted'));
             $zip->addFile($key, 'key.encrypted');
             $zip->close();
 
@@ -51,7 +53,7 @@ class EncryptFileWithKmsCommand extends Command
             unlink(base_path('.env.encrypted'));
             unlink(base_path('.env.key.encrypted'));
 
-            $zipDestinationPath = config('occulta.destination_path', 'dotenv/') . Carbon::now()->format('YmdHis') . ($envFileSuffix ? '.env.'.$envFileSuffix.'.zip' : '.env.zip');
+            $zipDestinationPath = config('occulta.destination_path', 'dotenv/').Carbon::now()->format('YmdHis').($envFileSuffix ? '.env.'.$envFileSuffix.'.zip' : '.env.zip');
             // Pushing the zip file to the configured storage disk
             Storage::disk(config('occulta.destination_disk'))->put(
                 path: $zipDestinationPath,
@@ -70,6 +72,7 @@ class EncryptFileWithKmsCommand extends Command
             );
         } else {
             $this->error('Encryption failed or returned unexpected format.');
+
             return self::FAILURE;
         }
 

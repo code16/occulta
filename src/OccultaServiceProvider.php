@@ -3,7 +3,7 @@
 namespace Code16\Occulta;
 
 use Code16\Occulta\Commands\CleanupEncryptedDotenvsCommand;
-use Code16\Occulta\Commands\EncryptDotenvWithKmsCommand;
+use Code16\Occulta\Commands\DecryptFileWithKmsCommand;
 use Code16\Occulta\Commands\EncryptFileWithKmsCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -20,9 +20,8 @@ class OccultaServiceProvider extends PackageServiceProvider
         $package
             ->name('occulta')
             ->hasConfigFile()
-            ->hasCommand(EncryptDotenvWithKmsCommand::class)
             ->hasCommand(CleanupEncryptedDotenvsCommand::class)
-            ->hasCommand(EncryptFileWithKmsCommand::class);
-        ;
+            ->hasCommand(EncryptFileWithKmsCommand::class)
+            ->hasCommand(DecryptFileWithKmsCommand::class);
     }
 }
