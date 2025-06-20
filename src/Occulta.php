@@ -70,6 +70,9 @@ class Occulta
             $iv
         );
 
+        // as soon as encryption is done, we can unset the plaintext key to avoid memory leaks
+        unset($plaintextKey);
+
         // Saving encrypted file
         $encryptedFilePath = $filePath.'.encrypted';
         // $storeFile = Storage::disk('local')->put($encryptedFilePath, $iv . $encryptedContent, ['throw' => true]);

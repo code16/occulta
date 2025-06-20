@@ -21,8 +21,8 @@ class EncryptFileWithKmsCommand extends Command
         $envFilePath = base_path('.env');
 
         if ($envFileSuffix) {
-            if (preg_match('/([\s ])/m', $envFileSuffix)) {
-                $this->error('Environment suffix contains whitespaces.');
+            if (!preg_match('/^[A-Za-z0-9_-]+$/m', $envFileSuffix)) {
+                $this->error('Environment suffix contains non-alphanumeric characters.');
 
                 return self::FAILURE;
             }
@@ -31,51 +31,68 @@ class EncryptFileWithKmsCommand extends Command
             $envFilePath = base_path('.env.'.$envFileSuffix);
         }
 
-        $files = $service->encryptFile($envFilePath);
+        try {
+            $files = $service->encryptFile($envFilePath);
+        } catch (\Throwable $e) {
+            $this->error('Encryption failed: '.$e->getMessage());
 
-        if (is_array($files) && isset($files['file']) && isset($files['key'])) {
-            $file = $files['file'];
-            $key = $files['key'];
+            return self::FAILURE;
+        }
 
-            $zip = new ZipArchive();
-            $zipPath = base_path($envFileSuffix ? '.env.'.$envFileSuffix.'.encrypted.zip' : '.env.encrypted.zip');
-            if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {
-
-                $this->error('Failed to create zip file.');
-
-                return self::FAILURE;
-            }
-
-            $zip->addFile($file, ($envFileSuffix ? '.env.'.$envFileSuffix.'.encrypted' : '.env.encrypted'));
-            $zip->addFile($key, 'key.encrypted');
-            $zip->close();
-
-            // Removing local files after zipping
-            unlink(base_path('.env.encrypted'));
-            unlink(base_path('.env.key.encrypted'));
-
-            $zipDestinationPath = config('occulta.destination_path', 'dotenv/').Carbon::now()->format('YmdHis').($envFileSuffix ? '.env.'.$envFileSuffix.'.zip' : '.env.zip');
-            // Pushing the zip file to the configured storage disk
-            Storage::disk(config('occulta.destination_disk'))->put(
-                path: $zipDestinationPath,
-                contents: file_get_contents(base_path('.env.encrypted.zip')),
-                options: [
-                    'recursive' => true,
-                ]
-            );
-
-            // Removing the zip file after storing it
-            unlink($zipPath);
-
-            $this->info('File encrypted successfully: ');
-            $this->line(
-                Storage::disk(config('occulta.destination_disk'))->path($zipDestinationPath)
-            );
-        } else {
+        if (!is_array($files) || !isset($files['file']) || !isset($files['key'])) {
             $this->error('Encryption failed or returned unexpected format.');
 
             return self::FAILURE;
         }
+
+        $file = $files['file'];
+        $key = $files['key'];
+
+        $zip = new ZipArchive();
+        $zipPath = base_path($envFileSuffix ? '.env.'.$envFileSuffix.'.encrypted.zip' : '.env.encrypted.zip');
+
+        if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {
+            $this->error('Failed to create zip file.');
+
+            return self::FAILURE;
+        }
+
+        // Adding the encrypted .env file and key to the zip
+        $zip->addFile($file, ($envFileSuffix ? '.env.'.$envFileSuffix.'.encrypted' : '.env.encrypted'));
+        $zip->addFile($key, 'key.encrypted');
+        $zip->close();
+
+        // Removing local files after zipping
+        if (file_exists($file)) {
+            unlink($file);
+        }
+        if (file_exists($key)) {
+            unlink($key);
+        }
+
+        $zipDestinationPath = sprintf(
+            '%s%s%s',
+            (str(config('occulta.destination_path', 'dotenv/'))->endsWith('/') ? config('occulta.destination_path', 'dotenv/') : config('occulta.destination_path', 'dotenv/').'/'),
+            Carbon::now()->format('YmdHis'),
+            ($envFileSuffix ? '.env.'.$envFileSuffix.'.zip' : '.env.zip')
+        );
+
+        // Pushing the zip file to the configured storage disk
+        Storage::disk(config('occulta.destination_disk'))->put(
+            path: $zipDestinationPath,
+            contents: file_get_contents($zipPath),
+            options: [
+                'recursive' => true,
+            ]
+        );
+
+        // Removing the zip file after storing it
+        unlink($zipPath);
+
+        $this->info('File encrypted successfully: ');
+        $this->line(
+            Storage::disk(config('occulta.destination_disk'))->path($zipDestinationPath)
+        );
 
         return self::SUCCESS;
     }
