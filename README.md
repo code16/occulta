@@ -64,3 +64,20 @@ php artisan occulta:decrypt path/to/encrypted/archive.zip
 ```
 
 Occulta will use your KMS configuration to decrypt the key file and the use the key to decrypt your env file.
+
+## Testing
+
+The package comes with a comprehensive test suite. To run the tests, you can use the following command:
+
+```bash
+composer test
+```
+
+The tests cover:
+
+- The main `Occulta` class functionality for encrypting and decrypting values and files
+- The `EncryptFileWithKmsCommand` for encrypting .env files and storing them
+- The `DecryptFileWithKmsCommand` for extracting and decrypting .env files from zip archives
+- The `CleanupEncryptedDotenvsCommand` for managing the history of encrypted .env files
+
+The tests use mocks for AWS KMS to avoid actual AWS calls during testing.

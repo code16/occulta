@@ -14,7 +14,7 @@ class DecryptFileWithKmsCommand extends Command
 
     public function handle(): int
     {
-        $service = new Occulta();
+        $service = app(Occulta::class);
         $zipPath = $this->argument('encryptedEnvZipPath');
 
         if (!file_exists($zipPath)) {

@@ -16,11 +16,11 @@ class EncryptFileWithKmsCommand extends Command
 
     public function handle(): int
     {
-        $service = new Occulta();
+        $service = app(Occulta::class);
         $envFileSuffix = config('occulta.env_suffix', null);
         $envFilePath = base_path('.env');
 
-        if ($envFileSuffix) {
+        if ($envFileSuffix !== null) {
             if (!preg_match('/^[A-Za-z0-9_-]+$/m', $envFileSuffix)) {
                 $this->error('Environment suffix contains non-alphanumeric characters.');
 
