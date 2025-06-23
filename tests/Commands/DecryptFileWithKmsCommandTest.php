@@ -6,6 +6,7 @@ use Code16\Occulta\Commands\DecryptFileWithKmsCommand;
 use Code16\Occulta\Occulta;
 use Code16\Occulta\Tests\TestCase;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use ZipArchive;
 
 class DecryptFileWithKmsCommandTest extends TestCase
@@ -48,7 +49,7 @@ class DecryptFileWithKmsCommandTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function it_decrypts_env_file_from_zip()
     {
         // Mock the Occulta service
@@ -65,7 +66,7 @@ class DecryptFileWithKmsCommandTest extends TestCase
             ->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_when_zip_file_does_not_exist()
     {
         $nonExistentZipPath = base_path('non-existent.zip');
@@ -75,7 +76,7 @@ class DecryptFileWithKmsCommandTest extends TestCase
             ->assertFailed();
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_when_zip_file_has_wrong_number_of_files()
     {
         // Create a zip with wrong number of files
@@ -98,7 +99,7 @@ class DecryptFileWithKmsCommandTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_when_zip_file_has_wrong_file_names()
     {
         // Create a zip with wrong file names
@@ -127,7 +128,7 @@ class DecryptFileWithKmsCommandTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_when_decryption_throws_exception()
     {
         // Mock the Occulta service to throw an exception
@@ -144,7 +145,7 @@ class DecryptFileWithKmsCommandTest extends TestCase
             ->assertFailed();
     }
 
-    /** @test */
+    #[Test]
     public function it_cleans_up_artifacts_after_successful_decryption()
     {
         // Mock the Occulta service
@@ -165,7 +166,7 @@ class DecryptFileWithKmsCommandTest extends TestCase
         $this->assertFileDoesNotExist(base_path('key.encrypted'));
     }
 
-    /** @test */
+    #[Test]
     public function it_cleans_up_artifacts_after_failed_decryption()
     {
         // Mock the Occulta service to throw an exception

@@ -6,6 +6,7 @@ use Code16\Occulta\Commands\CleanupEncryptedDotenvsCommand;
 use Code16\Occulta\Tests\TestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 
 class CleanupEncryptedDotenvsCommandTest extends TestCase
 {
@@ -17,7 +18,7 @@ class CleanupEncryptedDotenvsCommandTest extends TestCase
         Storage::fake('local');
     }
 
-    /** @test */
+    #[Test]
     public function it_keeps_the_most_recent_files_and_deletes_older_ones()
     {
         // Create test files with different timestamps in the filename
@@ -46,7 +47,7 @@ class CleanupEncryptedDotenvsCommandTest extends TestCase
         Storage::disk('local')->assertExists('dotenv/20220105000000.env.zip');
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_empty_directory()
     {
         // Run the command with no files in the directory
@@ -55,7 +56,7 @@ class CleanupEncryptedDotenvsCommandTest extends TestCase
             ->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_fewer_files_than_the_keep_limit()
     {
         // Create fewer files than the keep limit
@@ -78,7 +79,7 @@ class CleanupEncryptedDotenvsCommandTest extends TestCase
         Storage::disk('local')->assertExists('dotenv/20220102000000.env.zip');
     }
 
-    /** @test */
+    #[Test]
     public function it_respects_custom_keep_limit()
     {
         // Set a custom keep limit
@@ -108,7 +109,7 @@ class CleanupEncryptedDotenvsCommandTest extends TestCase
         Storage::disk('local')->assertExists('dotenv/20220104000000.env.zip');
     }
 
-    /** @test */
+    #[Test]
     public function it_respects_custom_destination_path()
     {
         // Set a custom destination path

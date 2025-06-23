@@ -1,17 +1,17 @@
 # Occulta
 
 ## Purpose
-Save a versioned and encrypted copy of .env on aws s3
+Save a versioned and encrypted copy of .env on a storage disk (eg: S3)
 
 ## How it works
-Occulta uses [AWS KMS](https://aws.amazon.com/kms/) and [Envelope encryption concept](https://docs.aws.amazon.com/kms/latest/developerguide/kms-cryptography.html#enveloping) to encrypt your `.env` file and store it on a given laravel disk (eg: S3). 
+Occulta uses [AWS KMS](https://aws.amazon.com/kms/) and [Envelope encryption strategy](https://docs.aws.amazon.com/kms/latest/developerguide/kms-cryptography.html#enveloping) to encrypt your `.env` file and store it on a given laravel disk (eg: S3). 
 It also keeps a versioned history of your encrypted `.env` files, so you can restore previous versions if needed.
 <br>
 Occulta will create an archive containing your encrypted environment file and an encrypted key file, which will be used by occulta to decrypt your env when needed.
 
 
 ## Installation
-This package requires Laravel 9.x or higher, php's extensions openssl and zip.
+This package requires Laravel 11.x or higher, php's extensions openssl and zip.
 
 You can install the package via composer:
 
@@ -46,7 +46,7 @@ Then, you should setup credentials to the proper aws user [allowed](https://docs
     ],
 ```
 
-Nom you should schedule tasks for backup and cleanup in `app/Console/Kernel.php` (`bootstrap/app.php` since Laravel 11) :
+Now you should schedule tasks for backup and cleanup in `app/Console/Kernel.php` (`bootstrap/app.php` since Laravel 11) :
 
 ```php
     protected function schedule(Schedule $schedule)

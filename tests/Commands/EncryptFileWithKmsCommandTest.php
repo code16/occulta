@@ -8,6 +8,7 @@ use Code16\Occulta\Tests\TestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 
 class EncryptFileWithKmsCommandTest extends TestCase
 {
@@ -32,7 +33,7 @@ class EncryptFileWithKmsCommandTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function it_encrypts_env_file_and_stores_it()
     {
         // Mock the Occulta service
@@ -67,7 +68,7 @@ class EncryptFileWithKmsCommandTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_encrypts_env_file_with_suffix_and_stores_it()
     {
         // Set up configuration with suffix
@@ -111,7 +112,7 @@ class EncryptFileWithKmsCommandTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_when_env_suffix_contains_invalid_characters()
     {
         // Set up configuration with invalid suffix
@@ -123,7 +124,7 @@ class EncryptFileWithKmsCommandTest extends TestCase
             ->assertFailed();
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_when_encryption_throws_exception()
     {
         // Mock the Occulta service to throw an exception
@@ -140,7 +141,7 @@ class EncryptFileWithKmsCommandTest extends TestCase
             ->assertFailed();
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_when_encryption_returns_unexpected_format()
     {
         // Mock the Occulta service to return invalid format

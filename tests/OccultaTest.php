@@ -6,10 +6,11 @@ use Aws\Kms\KmsClient;
 use Aws\Result;
 use Code16\Occulta\Occulta;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 
 class OccultaTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_encrypt_a_value()
     {
         // Mock the KMS client
@@ -36,7 +37,7 @@ class OccultaTest extends TestCase
         $this->assertEquals(base64_encode('encrypted-data'), $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_encrypt_a_file()
     {
         // Create a temporary file
@@ -79,7 +80,7 @@ class OccultaTest extends TestCase
         unlink($result['key']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_decrypt_a_file()
     {
         // Create a temporary file with encrypted content
@@ -118,7 +119,7 @@ class OccultaTest extends TestCase
         unlink($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_exception_when_file_does_not_exist()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -127,7 +128,7 @@ class OccultaTest extends TestCase
         $occulta->encryptFile('/path/to/nonexistent/file');
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_exception_when_decryption_fails()
     {
         // Create a temporary file with invalid encrypted content
