@@ -28,12 +28,20 @@ php artisan vendor:publish --tag=occulta-config
 and setup your values (especially the kms `key_id` and `destination disk`) in your `config/occulta.php` file :
 
 ```php
-
-    'key_id' => '0904c439-ff1f-4e9d-8a26-4e32ced6fe0x',
-
-    'destination_disk' => 's3_backup',
-    'destination_path' => null, // defaults to 'dotenv/'
-];
+return [
+        // kms key id as seen in aws's kms dashboard (usually it looks like an uuid)
+        'key_id' => '0904c439-ff1f-4e9d-8a26-4e32ced6fe0x',
+        
+        [...]
+        
+        'destination_disk' => 's3_backup',
+        'destination_path' => null, // defaults to 'dotenv/'
+    
+        // If you want to backup an env file with a suffix such as .env.production, you can set this to your desired suffix
+        'env_suffix' => null, // eg: 'production'
+        
+        [...]
+    ];
 ```
 
 Then, you should setup credentials to the proper aws user [allowed](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-users) to "use" the given kms key, by adding a kms section in your `config/services.php` file :
@@ -64,7 +72,7 @@ php artisan occulta:decrypt path/to/encrypted/archive.zip
 ```
 
 Occulta will use your KMS configuration and AWS access and secret keys to decrypt your env file.
-<br><br>
+<br>
 > [!IMPORTANT]  
 > It is likely that these credentials where in your lost .env, then, you can follow the [recovery procedure](docs/RECOVERY.md) to restore your environment.
 
