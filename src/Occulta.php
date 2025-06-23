@@ -81,7 +81,6 @@ class Occulta
         // Saving encrypted key
         $encryptedKeyPath = $filePath.'.key.encrypted';
         $ciphertextKeyBase64 = base64_encode($ciphertextKey);
-        // $storeKey = Storage::disk('local')->put($encryptedKeyPath, $ciphertextKeyBase64, ['throw' => true]);
         file_put_contents($encryptedKeyPath, $ciphertextKeyBase64);
 
         return [

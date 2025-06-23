@@ -63,7 +63,11 @@ If you need to decrypt an encrypted env archive, you can use the `occulta:decryp
 php artisan occulta:decrypt path/to/encrypted/archive.zip
 ```
 
-Occulta will use your KMS configuration to decrypt the key file and the use the key to decrypt your env file.
+Occulta will use your KMS configuration and AWS access and secret keys to decrypt your env file.
+<br><br>
+> [!IMPORTANT]  
+> It is likely that these credentials where in your lost .env, then, you can follow the [recovery procedure](docs/RECOVERY.md) to restore your environment.
+
 
 ## Testing
 
