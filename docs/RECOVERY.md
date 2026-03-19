@@ -3,7 +3,7 @@
 To restore your environment using Occulta, you will need to have access to your KMS key.
 A good practice is to store your AWS access key and secret in your `.env`, the one you just lost...
 
-> [!INFO]
+> [!NOTE]
 > To restore access to your KMS key, you will need a user that has the correct rights over your KMS key. The following guide will show you how to create a new access key on a previously configured IAM account, but you can also create a new account and give it accesses to your KMS key.
 
 ## Get AWS credentials
