@@ -17,7 +17,7 @@ If you don't have a copy elsewhere of your "Access Key 1" secret, you will have 
 Keep the access key and secret that you just created in a safe place, you will need them to restore your environment.
 
 > [!WARNING]
-> If your previously configured user already have a second access key, you can create a new IAM user, and give it access to your KMS key in your key strategy configuration.
+> If your previously configured user already have a second access key, you can create a new IAM user, and give it access to your KMS key, by accessing your key detail in AWS dashboard, and adding your new IAM user in your key strategy configuration.
 
 ## Get Your KMS key ID and region
 ![aws-kms-key.png](aws-kms-key.png)
